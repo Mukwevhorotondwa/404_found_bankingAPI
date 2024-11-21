@@ -45,33 +45,40 @@ def change_account_pin():
 
 def sign_up():
     credential_list = []
-    id = input("Enter your username here: ")
-    if id:
-        credential_list.append(id)
-        password = input("Enter your password here: ")
-        if password:
-            credential_list.append(password)
-            first_name = input("Enter your first name here: ")
-            if first_name:
-                credential_list.append(first_name)
-                surname = input("Enter your surname here: ")
-                if surname:
-                    credential_list.append(surname)
-                    email = input("Enter your email here: ")
-                    if email:
-                        credential_list.append(email)
-                        print(f"\nWelcome {id}. We are pleased to be your trusted bank, may we have a fruitful journey.\n")
-                        # continue_or_not = input("Enter Y to continue or E to exit: ")
-                        # if continue_or_not == 'E' or continue_or_not == 'e':
-                        #     time.sleep(3)
-                        #     clear_terminal()
+    account_type = input("Enter the type of account you would like to have, '1' for a personal account or '2' for a business account")
+    if account_type == '1' or account_type == '2':
+        id = input("Enter your username here: ")
+        if id:
+            credential_list.append(id)
+            password = input("Enter your password here: ")
+            if password:
+                credential_list.append(password)
+                first_name = input("Enter your first name here: ")
+                if first_name:
+                    credential_list.append(first_name)
+                    surname = input("Enter your surname here: ")
+                    if surname:
+                        credential_list.append(surname)
+                        email = input("Enter your email here: ")
+                        if email:
+                            credential_list.append(email)
+                            print(f"\nWelcome {id}. We are pleased to be your trusted bank, may we have a fruitful journey.\n")
+                            # continue_or_not = input("Enter Y to continue or E to exit: ")
+                            # if continue_or_not == 'E' or continue_or_not == 'e':
+                            #     time.sleep(3)
+                            #     clear_terminal()
+                        else:
+                            print("An email is required.\n")
+                            time.sleep(5)
+                            clear_terminal()
+                            sign_up()
                     else:
-                        print("An email is required.\n")
+                        print("A surname is required.\n")
                         time.sleep(5)
                         clear_terminal()
                         sign_up()
                 else:
-                    print("A surname is required.\n")
+                    print("A password is required.\n")
                     time.sleep(5)
                     clear_terminal()
                     sign_up()
@@ -81,16 +88,18 @@ def sign_up():
                 clear_terminal()
                 sign_up()
         else:
-            print("A password is required.\n")
+            print("A username is required.\n")
             time.sleep(5)
             clear_terminal()
             sign_up()
+        if account_type == '1': credential_list.append('personal account')
+        if account_type == '2': credential_list.append('business account')
     else:
-        print("A username is required.\n")
+        print("Choose a valid account type")
         time.sleep(5)
         clear_terminal()
-        sign_up()
-
+        sign_up
+        
     return tuple(credential_list)
 
 def sign_in():

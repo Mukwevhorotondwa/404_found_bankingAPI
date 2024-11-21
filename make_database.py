@@ -67,7 +67,7 @@ def delete_clients(userID):
     with create_db_file() as connect:
         conn = connect.cursor()
         conn.execute("DELETE FROM Clients WHERE user_id=?",userID)
-        #delete_accounts_all(userID)
+        delete_accounts_all(userID)
         connect.commit()
 
 def delete_accounts_specific(accountID):
