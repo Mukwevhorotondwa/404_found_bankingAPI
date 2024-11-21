@@ -1,6 +1,6 @@
 import sqlite3
 from flask import Flask, request, jsonify
-
+from atm_processes import sign_up
 dtbase = "bank.db"
 def create_db_file():
     connection = sqlite3.connect(dtbase)
@@ -41,6 +41,9 @@ def insert_into_transactions(*transaction_details):
         conn.execute("INSERT INTO Transactions(account_id,transaction_type,transaction_amonut) VALUES (?,?,?)",transaction_details)
         connect.commit()
 
+
+def update_clients(*client_details):
+    pass
 
 
 
