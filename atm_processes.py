@@ -122,4 +122,3 @@ def menu_display():
     elif landing_screen() == '2':
         sign_in()
 
-menu_display()
