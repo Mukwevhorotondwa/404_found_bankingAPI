@@ -45,7 +45,7 @@ def change_account_pin():
 
 def sign_up():
     credential_list = []
-    account_type = input("Enter the type of account you would like to have, '1' for a personal account or '2' for a business account")
+    account_type = input("Enter the type of account you would like to have, '1' for a personal account or '2' for a business account: ")
     if account_type == '1' or account_type == '2':
         id = input("Enter your username here: ")
         if id:
@@ -127,6 +127,7 @@ def menu_display():
         details = sign_up()
         continue_or_not = input("Enter E to exit or any other button to continue: ")
         if continue_or_not == 'E' or continue_or_not == 'e':
+            insert_into_clients(id,password,name,surname,email)
             time.sleep(3)
             clear_terminal()
         else:
