@@ -1,13 +1,17 @@
 import os
+import platform
 import random
 import time
-from make_database import insert_into_clients,insert_into_accounts,insert_into_transactions
+from make_database import insert_into_clients,insert_into_accounts,insert_into_transactions,build_db
 
 digits = [0,1,2,3,4,5,6,7,8,9]
+build_db()
 
 def clear_terminal():
-    os.system('clear')
-
+    if 'Windows' in platform.uname():
+        os.system("cls")
+    else:
+        os.system('clear')
 def generate_account_id():
     account_id = ''
     
@@ -117,8 +121,16 @@ def menu_display():
             time.sleep(3)
             clear_terminal()
         else:
-            insert_into_clients(details)
+            id = details[0]
+            password = details[1]
+            name = details[2]
+            surname = details[3]
+            email = details[4]
+            
+            insert_into_clients(id,password,name,surname,email)
             print("You have successfully created an account with us, we're happy to have you.")
     elif landing_screen() == '2':
         sign_in()
+
+menu_display()
 

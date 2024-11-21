@@ -19,7 +19,7 @@ def build_db():
         database.execute("CREATE TABLE IF NOT EXISTS Accounts(account_id TEXT PRIMARY KEY, account_pin TEXT NOT NULL, user_id TEXT NOT NULL, account_type TEXT, account_balance INTEGER)")
 
         #create a table for transactions, name it transactions
-        database.execute("CREATE TABLE IF NOT EXISTS Transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, account_id TEXT NOT NULL, transaction_type TEXT, transaction_amount INTEGER)")
+        database.execute("CREATE TABLE IF NOT EXISTS Transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, account_id TEXT NOT NULL, transaction_type TEXT, transaction_amount INTEGER, transaction_date TEXT)")
 
         #saving changes
         connect.commit()
@@ -87,7 +87,6 @@ def delete_transactions_single_account_all(accountID):
         conn = connect.cursor()
         conn.execute("DELETE FROM Transactions WHERE account_id=?",accountID)
         connect.commit()
-
 
 #build_db()
 #insert_into_clients("Tsipora","1@Thisguy","Tshepo","Majoro","mothofeelama@gmail.com")
