@@ -164,18 +164,37 @@ def make_withdrawal(account_id):
     transaction_amount = input("Enter the withdrawal amount here: ")
     if transaction_amount.isdigit():
         transaction_amount = int(transaction_amount)
-        make_database.insert_into_transactions(account_id,transaction_type,transaction_amount)
-        make_database.update_accounts_balance_withdrawal(transaction_amount,account_id)
-        new_balance = make_database.select_account_balance(account_id)
-        print(f"\nYou have successfully made a R {transaction_amount} cash withdrawal.\nYour account balance is now {new_balance}")
-        continue_or_not = input("Enter E to exit or any other button to return to the main menu: ")
-        if continue_or_not == 'E' or continue_or_not == 'e':
-            time.sleep(3)
-            clear_terminal()
+        current_balance = make_database.select_account_balance(account_id)
+        if transaction_amount <= current_balance:
+            make_database.insert_into_transactions(account_id,transaction_type,transaction_amount)
+            make_database.update_accounts_balance_withdrawal(transaction_amount,account_id)
+            new_balance = make_database.select_account_balance(account_id)
+            print(f"\nYou have successfully made a R {transaction_amount} cash withdrawal.\nYour account balance is now {new_balance}")
+            continue_or_not = input("Enter E to exit or any other button to return to the main menu: ")
+            if continue_or_not == 'E' or continue_or_not == 'e':
+                time.sleep(3)
+                clear_terminal()
+                print("\nExiting program...")
+                time.sleep(5)
+                clear_terminal()
+            else:
+                time.sleep(3)
+                clear_terminal()
+                menu(account_id)
         else:
-            time.sleep(3)
-            clear_terminal()
-            menu(account_id)
+            difference = transaction_amount - current_balance
+            print(f"You have insufficient funds in your account, top up your account with {difference} to make a withdrawal of {transaction_amount}")
+            continue_or_not = input("Enter E to exit or any other button to return to the main menu: ")
+            if continue_or_not == 'E' or continue_or_not == 'e':
+                time.sleep(3)
+                clear_terminal()
+                print("\nExiting program...")
+                time.sleep(5)
+                clear_terminal()
+            else:
+                time.sleep(3)
+                clear_terminal()
+                menu(account_id)
     else:
         print(f"R {transaction_amount} is an invalid transaction amount.")
         time.sleep(5)
@@ -225,6 +244,8 @@ def menu_actions(choice,account_id):
         clear_terminal()
         make_withdrawal(account_id)
     elif int(choice) == 3:
+        time.sleep(3)
+        clear_terminal()
         check_balance(account_id)
     elif int(choice) == 4:
         time.sleep(3)
@@ -265,6 +286,9 @@ def menu_backend_logic_layout():
             make_database.insert_into_clients(username,password,name,surname,email)
             make_database.insert_into_accounts(account_id,account_pin,username,account_type,account_balance)
             print(f"\n\nWelcome {username}. We are pleased to be your trusted bank, may we have a fruitful journey.\nCheck your emails for your login details.")
+            time.sleep(5)
+            clear_terminal()
+            print("\nExiting program...")
             time.sleep(5)
             clear_terminal()
         else:
