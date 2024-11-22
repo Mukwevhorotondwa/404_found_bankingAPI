@@ -19,7 +19,7 @@ def build_db():
         database.execute("CREATE TABLE IF NOT EXISTS Accounts(account_id TEXT PRIMARY KEY, account_pin TEXT NOT NULL, user_id TEXT NOT NULL, account_type TEXT, account_balance INTEGER)")
 
         #create a table for transactions, name it transactions
-        database.execute("CREATE TABLE IF NOT EXISTS Transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, account_id TEXT NOT NULL, transaction_type TEXT, transaction_amount INTEGER)")
+        database.execute("CREATE TABLE IF NOT EXISTS Transactions(transaction_id INTEGER PRIMARY KEY AUTOINCREMENT, account_id TEXT NOT NULL, transaction_type TEXT, transaction_amount INTEGER, transaction_date TEXT)")
 
         #saving changes
         connect.commit()
@@ -104,6 +104,7 @@ def select_account_balance(accountID):
         account_balance = conn.execute("SELECT account_balance FROM Accounts WHERE Account_id=(?)",(accountID,))
         account_balance_converted = account_balance.fetchall()
         return account_balance_converted[0][0]
+
 
 #build_db()
 #insert_into_clients("Tsipora","1@Thisguy","Tshepo","Majoro","mothofeelama@gmail.com")

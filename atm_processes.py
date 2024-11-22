@@ -1,17 +1,19 @@
 import os
+import platform
 import random
 import time
 import platform
 import make_database
+from make_database import insert_into_clients,insert_into_accounts,insert_into_transactions,build_db
 
 digits = [0,1,2,3,4,5,6,7,8,9]
+build_db()
 
 def clear_terminal():
     if 'Windows' in platform.uname():
-        os.system('cls')
+        os.system("cls")
     else:
         os.system('clear')
-
 def generate_account_id():
     account_id = ''
     
@@ -73,13 +75,14 @@ def sign_up():
                         # if continue_or_not == 'E' or continue_or_not == 'e':
                         #     time.sleep(3)
                         #     clear_terminal()
+
                     else:
-                        print("An email is required.\n")
+                        print("A surname is required.\n")
                         time.sleep(5)
                         clear_terminal()
                         sign_up()
                 else:
-                    print("A surname is required.\n")
+                    print("A password is required.\n")
                     time.sleep(5)
                     clear_terminal()
                     sign_up()
@@ -89,12 +92,14 @@ def sign_up():
                 clear_terminal()
                 sign_up()
         else:
-            print("A password is required.\n")
+            print("A username is required.\n")
             time.sleep(5)
             clear_terminal()
             sign_up()
+        if account_type == '1': credential_list.append('personal account')
+        if account_type == '2': credential_list.append('business account')
     else:
-        print("A username is required.\n")
+        print("Choose a valid account type")
         time.sleep(5)
         clear_terminal()
         sign_up()
@@ -103,6 +108,7 @@ def sign_up():
     account_id = generate_account_id()
     credential_list.append(account_id)
     credential_list.append(account_pin)
+
     return tuple(credential_list)
 
 def sign_in():
@@ -299,6 +305,7 @@ def menu_backend_logic_layout():
             clear_terminal()
             menu(account_id)
 
+
     elif landing_screen() == '2':
         sign_in()
         time.sleep(5)
@@ -306,4 +313,6 @@ def menu_backend_logic_layout():
         menu(account_id)
 
 menu_backend_logic_layout()
+
+menu_display()
 
