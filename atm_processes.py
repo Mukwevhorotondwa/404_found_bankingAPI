@@ -1,19 +1,17 @@
 import os
-import platform
 import random
 import time
 import platform
 import make_database
-from make_database import insert_into_clients,insert_into_accounts,insert_into_transactions,build_db
 
 digits = [0,1,2,3,4,5,6,7,8,9]
-build_db()
 
 def clear_terminal():
     if 'Windows' in platform.uname():
-        os.system("cls")
+        os.system('cls')
     else:
         os.system('clear')
+
 def generate_account_id():
     account_id = ''
     
@@ -33,21 +31,39 @@ def generate_account_pin():
 
 def change_account_pin(account_id):
     new_pin = input("Enter your new 5 digit pin here: ")
-    if not new_pin.isdigit():
-        print("Pin must be made of digits only")
-        time.sleep(5)
-        clear_terminal()
-    elif len(new_pin)<5:
-        print("Pin must be 5 digits long")
-        time.sleep(5)
-        clear_terminal()
+    old_pin = make_database.select_account_pin(account_id)
+    if new_pin != old_pin:
+        if not new_pin.isdigit():
+            print("Pin must be made of digits only")
+            time.sleep(5)
+            clear_terminal()
+        elif len(new_pin)<5:
+            print("Pin must be 5 digits long")
+            time.sleep(5)
+            clear_terminal()
+        else:
+            #print("You have successfully updated your pin")
+            make_database.update_accounts_pin(new_pin,account_id)
+            print("\nYou have successfully changed your account pin")
+            continue_or_not = input("\n\nEnter E to exit or any other button to return to the main menu: ")
+            if continue_or_not == 'E' or continue_or_not == 'e':
+                time.sleep(3)
+                clear_terminal()
+                print("\nExiting program...")
+                time.sleep(5)
+                clear_terminal()
+            else:
+                time.sleep(3)
+                clear_terminal()
+                menu(account_id)
     else:
-        #print("You have successfully updated your pin")
-        make_database.update_accounts_pin(new_pin,account_id)
-        print("\nYou have successfully changed your account pin")
+        print("New pin must be different from the old pin")
         continue_or_not = input("\n\nEnter E to exit or any other button to return to the main menu: ")
         if continue_or_not == 'E' or continue_or_not == 'e':
             time.sleep(3)
+            clear_terminal()
+            print("\nExiting program...")
+            time.sleep(5)
             clear_terminal()
         else:
             time.sleep(3)
@@ -75,14 +91,13 @@ def sign_up():
                         # if continue_or_not == 'E' or continue_or_not == 'e':
                         #     time.sleep(3)
                         #     clear_terminal()
-
                     else:
-                        print("A surname is required.\n")
+                        print("An email is required.\n")
                         time.sleep(5)
                         clear_terminal()
                         sign_up()
                 else:
-                    print("A password is required.\n")
+                    print("A surname is required.\n")
                     time.sleep(5)
                     clear_terminal()
                     sign_up()
@@ -92,14 +107,12 @@ def sign_up():
                 clear_terminal()
                 sign_up()
         else:
-            print("A username is required.\n")
+            print("A password is required.\n")
             time.sleep(5)
             clear_terminal()
             sign_up()
-        if account_type == '1': credential_list.append('personal account')
-        if account_type == '2': credential_list.append('business account')
     else:
-        print("Choose a valid account type")
+        print("A username is required.\n")
         time.sleep(5)
         clear_terminal()
         sign_up()
@@ -108,7 +121,6 @@ def sign_up():
     account_id = generate_account_id()
     credential_list.append(account_id)
     credential_list.append(account_pin)
-
     return tuple(credential_list)
 
 def sign_in():
@@ -206,8 +218,41 @@ def make_withdrawal(account_id):
         time.sleep(5)
         make_deposit(account_id)
 
+def change_password(userID):
+    new_password = input("Enter your new profile password here: ")
+    old_password = make_database.select_client_password(userID)
+    account_id = make_database.select_account_id(userID)
+    if new_password != old_password:
+        make_database.update_clients_password(new_password,userID)
+        print("\nYou have succesfully changed your profile password")
+        continue_or_not = input("Enter E to exit or any other button to return to the main menu: ")
+        if continue_or_not == 'E' or continue_or_not == 'e':
+            time.sleep(3)
+            clear_terminal()
+            print("\nExiting program...")
+            time.sleep(5)
+            clear_terminal()
+        else:
+            time.sleep(3)
+            clear_terminal()
+            menu(account_id)
+    else:
+        print("New password must be different from the old password")
+        continue_or_not = input("Enter E to exit or any other button to return to the main menu: ")
+        if continue_or_not == 'E' or continue_or_not == 'e':
+            time.sleep(3)
+            clear_terminal()
+            print("\nExiting program...")
+            time.sleep(5)
+            clear_terminal()
+        else:
+            time.sleep(3)
+            clear_terminal()
+            menu(account_id)
+
+
 def menu(account_id):
-    print("\n\n")
+    print("\n")
     print("1. Make a cash deposit")
     print("2. Make a cash withdrawal")
     print("3. Check account balance")
@@ -260,7 +305,8 @@ def menu_actions(choice,account_id):
     elif int(choice) == 5:
         time.sleep(3)
         clear_terminal()
-        pass
+        user_id = make_database.select_client_id(account_id)
+        change_password(user_id)
     elif int(choice) == 6:
         time.sleep(3)
         clear_terminal()
@@ -305,7 +351,6 @@ def menu_backend_logic_layout():
             clear_terminal()
             menu(account_id)
 
-
     elif landing_screen() == '2':
         sign_in()
         time.sleep(5)
@@ -313,6 +358,4 @@ def menu_backend_logic_layout():
         menu(account_id)
 
 menu_backend_logic_layout()
-
-menu_display()
 
