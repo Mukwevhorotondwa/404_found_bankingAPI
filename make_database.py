@@ -37,18 +37,18 @@ def insert_into_accounts(accountID,acoountPIN,userID,accountType,accountBalance)
         conn.execute("INSERT INTO Accounts(account_id,account_pin,user_id,account_type,account_balance) VALUES (?,?,?,?,?)",(accountID,acoountPIN,userID,accountType,accountBalance))
         connect.commit()
 
-def insert_into_transactions(accountID,transactionType,transactionAmount):
+def insert_into_transactions(accountID,transactionType,transactionAmount,transactionDate):
     with create_db_file() as connect:
         conn = connect.cursor()
-        conn.execute("INSERT INTO Transactions(account_id,transaction_type,transaction_amount) VALUES (?,?,?)",(accountID,transactionType,transactionAmount))
+        conn.execute("INSERT INTO Transactions(account_id,transaction_type,transaction_amount,transaction_date) VALUES (?,?,?,?)",(accountID,transactionType,transactionAmount,transactionDate))
         connect.commit()
 
 #updating
-def update_clients(password,id):
+def update_clients_password(password,id):
     with create_db_file() as connect:
         conn = connect.cursor()
         conn.execute("UPDATE Clients SET user_password=? WHERE user_id=?",(password,id))
-        conn.commit()
+        connect.commit()
 
 def update_accounts_pin(pin,id):
     with create_db_file() as connect:
@@ -104,6 +104,53 @@ def select_account_balance(accountID):
         account_balance = conn.execute("SELECT account_balance FROM Accounts WHERE Account_id=(?)",(accountID,))
         account_balance_converted = account_balance.fetchall()
         return account_balance_converted[0][0]
+    
+def select_account_id(userID):
+    with create_db_file() as connect:
+        conn = connect.cursor()
+        id = conn.execute("SELECT account_id FROM Accounts WHERE user_id=?",(userID,))
+        id_converted = id.fetchall()
+        return id_converted[0][0]
+
+def select_account_pin(accountID):
+    with create_db_file() as connect:
+        conn = connect.cursor()
+        pin = conn.execute("SELECT account_pin FROM Accounts WHERE account_id=?",(accountID,))
+        pin_converted = pin.fetchall()
+        return pin_converted[0][0]
+
+def select_client_id(accountID):
+    with create_db_file() as connect:
+        conn = connect.cursor()
+        user_id = conn.execute("SELECT user_id FROM Accounts WHERE account_id=?",(accountID,))
+        user_id_converted = user_id.fetchall()
+        return user_id_converted[0][0]
+
+def select_client_password(userID):
+    with create_db_file() as connect:
+        conn = connect.cursor()
+        password = conn.execute("SELECT user_password FROM Clients WHERE user_id=?",(userID,))
+        password_converted = password.fetchall()
+        try:
+            return password_converted[0][0]
+        except:
+            pass
+
+def select_all_client_id():
+    with create_db_file() as connect:
+        conn = connect.cursor()
+        all_user_ids = conn.execute("SELECT user_id FROM Clients")
+        all_user_ids_converted = all_user_ids.fetchall()
+        all_user_ids_list = []
+        n = 0
+        number_of_user_ids = len(all_user_ids_converted)
+        try:
+            while n<number_of_user_ids:
+                all_user_ids_list.append(all_user_ids_converted[n][n])
+                n+=1
+        except:
+            pass
+        return all_user_ids_list
 
 
 #build_db()
